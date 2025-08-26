@@ -7,7 +7,10 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 
 var app = builder.Build();
-app.UseCors(app => app.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().SetIsOriginAllowed(_ => true));
+app.UseCors(app => app.AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowAnyOrigin()
+    .SetIsOriginAllowed(_ => true));
 app.MapControllers();
 app.UseOpenApi();
 app.UseSwaggerUi();
