@@ -2,12 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace mywebapp.Controllers;
 
-public class Pet
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-}
-
 [ApiController]
 [ResponseCache(NoStore = true, Duration = 0)]
 public class PetController(MyFakeDatabase db) : ControllerBase
