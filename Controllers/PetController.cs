@@ -19,10 +19,21 @@ public class PetController(MyFakeDatabase db) : ControllerBase
     }
 
     [HttpPost(nameof(CreatePet))]
-    public List<Pet> CreatePet([FromBody]Pet pet)
+    public ActionResult<List<Pet>> CreatePet([FromBody]Pet pet)
     {
+        if (pet.Name.Length < 2)
+            return BadRequest("Validation error: too short name");
+        
         db.MyFakePetDatabase.Add(pet);
         return db.MyFakePetDatabase;
+    }
+
+    [HttpDelete]
+    [Route("pet/{id}")]
+    public object DeletePet([FromRoute]int id)
+    {
+        //lookup in the DB first pet with id = id and delete it (optionally return it)
+        return id;
     }
     
     //todo: Create PUT/update method + DELETE method
