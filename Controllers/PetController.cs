@@ -4,10 +4,12 @@ namespace mywebapp.Controllers;
 
 public class Pet
 {
+    public int Id { get; set; }
     public string Name { get; set; }
 }
 
 [ApiController]
+[ResponseCache(NoStore = true, Duration = 0)]
 public class PetController(MyFakeDatabase db) : ControllerBase
 {
     
@@ -15,7 +17,7 @@ public class PetController(MyFakeDatabase db) : ControllerBase
     [HttpGet]
     public List<Pet> GetAllPets()
     {
-        return db.MyFakePetDatabase;
+        return db.MyFakePetDatabase.ToList();
     }
 
     [HttpPost(nameof(CreatePet))]
@@ -30,12 +32,20 @@ public class PetController(MyFakeDatabase db) : ControllerBase
 
     [HttpDelete]
     [Route("pet/{id}")]
-    public object DeletePet([FromRoute]int id)
+    public Pet DeletePet([FromRoute]int id)
     {
-        //lookup in the DB first pet with id = id and delete it (optionally return it)
-        return id;
+        var pet = db.MyFakePetDatabase.First(p => p.Id == id);
+        db.MyFakePetDatabase.Remove(pet);
+        return pet;
     }
-    
-    //todo: Create PUT/update method + DELETE method
+
+    [HttpPut]
+    [Route("pet/{id}")]
+    public Pet UpdatePet([FromRoute] int id, [FromBody] Pet pet)
+    {
+        var existingPet = db.MyFakePetDatabase.First(p => p.Id == id);
+        existingPet.Name = pet.Name;
+        return existingPet;
+    }
     
 }
